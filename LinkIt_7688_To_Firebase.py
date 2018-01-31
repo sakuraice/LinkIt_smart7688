@@ -5,7 +5,7 @@ import requests
 import json
 
 # ******************************************************************************************
-# Set Firebase URL, Date, Time, Location                                                   #                                                                         #
+# Set Firebase URL, Date, Time, Location                                                                                                 
 # ******************************************************************************************
 
 IntData = 0
