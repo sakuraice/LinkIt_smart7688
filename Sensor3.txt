@@ -1,0 +1,36 @@
+import time
+import sys  
+import httplib, urllib
+import json
+
+sys.path.insert(0, '/usr/lib/python2.7/bridge/') 
+from bridgeclient import BridgeClient as bridgeclient
+
+deviceId = "DEb509qK"
+deviceKey = "d0JacEbeX8SdRLkb"
+
+def post_to_mcslite(payload):
+    headers = {"Content-type": "text/csv", "deviceKey": deviceKey}
+    not_connected = 1
+    while (not_connected):
+        try:
+            conn = httplib.HTTPConnection("api.mediatek.com:80")
+            conn.connect()
+            not_connected = 0
+        except (httplib.HTTPException, socket.error) as ex:
+            print "Error: %s" % ex
+            time.sleep(10) 
+
+    conn.request("POST", "/api/devices/" + deviceId + "/datapoints.csv", payload, headers)
+    response = conn.getresponse()
+    print( response.status, response.reason, payload, time.strftime("%c"))
+    data = response.read()
+    conn.close()
+
+while True:
+    value = bridgeclient()
+    t0 = value.get("t")
+    t0String = "DataOther,," + time.strftime("%c")
+    payload =  t0String + "\n"
+    post_to_mcslite(payload)
+    time.sleep(10)

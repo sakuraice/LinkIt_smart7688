@@ -1,0 +1,25 @@
+var mcs = require('mcsjs');
+var exec = require('child_process').exec;
+var Promise = require('bluebird');
+var fs = Promise.promisifyAll(require("fs"));
+
+var myApp = mcs.register({
+  deviceId: 'DCj0Rnam',
+  deviceKey: 'kPiH1PR1RVE6qWfk',
+  host: 'api.mediatek.com'
+});
+//fswebcam -r 640x480 -S15 --jpeg 95 --save /tmp/test.jpg 這個是把照片擴成640*480的指令，可是感覺像素不變
+var intervalId = setInterval(function(DataChannelId){
+child = exec('fswebcam -i 0 -d v4l2:/dev/video0 --no-banner -p YUYV --jpeg 95 --save /tmp/test.jpg', function (error, stdout, stderr) {
+    console.log('stdout: ' + stdout);
+    console.log('stderr: ' + stderr);
+    if (error !== null) {
+        console.log('exec error: ' + error);
+    }
+    fs.readFileAsync('/tmp/test.jpg')
+    .then(function(data) {
+        myApp.emit(DataChannelId,'', new Buffer(data).toString('base64'));
+    });
+});
+
+},10000,"DataImage");

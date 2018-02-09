@@ -1,0 +1,18 @@
+var mcs = require('mcsjs');
+var SerialPort = require("serialport").SerialPort;
+var serialPort = new SerialPort("/dev/ttyS0",{
+baudrate:9600});
+
+var myApp = mcs.register({
+    deviceId: 'DEb509qK',
+    deviceKey: 'd0JacEbeX8SdRLkb',
+});
+
+serialPort.on("open",function(){
+    receivedData = "";
+    serialPort.on('data',function(data){
+    receivedData = data.toString();
+        a=receivedData.length;
+        myApp.emit('DataInteger','',receivedData.substring(2,a));
+    });
+});

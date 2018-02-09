@@ -1,0 +1,33 @@
+//網路上寫的sleep方法
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+while(1){//實作調用網路上寫的方法
+//Do what for work;
+sleep(1000);//1000 = 1 second;
+}
+
+//sleep的方法，調用時輸入毫秒
+function sleep(time){
+    var now = new Date();
+    var end = new Date();
+    while((end-now) < time) {
+        end = new Date();
+    }
+}
+//定時器Timeout，只會執行一次，在設定的時間後執行，0的部分是設定時間，單位是毫秒
+var timeoutId = setTimeout(function(){
+    console.log("123");
+}, 0);
+clearTimeout(timeoutId);//清除定時器
+
+//定時器Interval，循環執行，0的部分是設定時間，單位是毫秒
+var intervalId = setInterval(function(a,b){
+    console.log(a,b);
+}, 1000 , 'aaa' ,'bbb');
+intervalId.unref();//這是關閉定時器的方法，程式內只有一個定時器的時候才有效
